@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="MarketplaceSeller-ProvisionProducts" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-SyncOffers" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-OrderSync" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Settlements" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Performance" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Notifications" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Reminders" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-DocumentExpiry" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Recovery" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="MarketplaceSeller-Cleanup" mode="delete">
+        <triggers/>
+    </job>
+</jobs>
