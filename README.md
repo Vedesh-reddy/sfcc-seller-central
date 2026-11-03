@@ -72,7 +72,7 @@ A seller can offer any catalog product with their own price, stock, SKU, conditi
 
 ![Offers list](docs/images/seller-offers.png)
 
-After the `MarketplaceSeller-SyncOffers` job, the offer appears on the product page under **Offers from sellers**, and shoppers can add it to the cart.
+After the `SyncPrepare` step of `MarketplaceSeller-Job`, the offer appears on the product page under **Offers from sellers**, and shoppers can add it to the cart.
 
 ![Seller offers on the product page](docs/images/pdp-seller-offers.png)
 
@@ -94,11 +94,11 @@ Marketplace › Finance holds the commission rules. Here a DEFAULT rule takes 10
 
 ![DEFAULT commission rule](docs/images/bm-marketplace-rules.png)
 
-Once the order is paid, the `MarketplaceSeller-OrderSync` job creates the seller's own order, with the seller's lines and the commission already booked.
+Once the order is paid, the `OrderSync` step of `MarketplaceSeller-Job` creates the seller's own order, with the seller's lines and the commission already booked.
 
 ![Orders to ship in Seller Central](docs/images/seller-orders.png)
 
-The seller ships from Seller Central with a carrier and tracking number. Earnings become available after the return window, and the `MarketplaceSeller-Settlements` job pays them out.
+The seller ships from Seller Central with a carrier and tracking number. Earnings become available after the return window, and the `Settlements` step of `MarketplaceSeller-Job` pays them out.
 
 ![Seller order with net amount and shipment form](docs/images/seller-order-ship.png)
 
@@ -141,6 +141,12 @@ The seller ships from Seller Central with a carrier and tracking number. Earning
 
 The full procedure is in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
+## Background job
+
+All background work runs in one Business Manager job, `MarketplaceSeller-Job`, with its steps in order. Steps that run less often than the job keep their own timing with `RunEveryMinutes` or `RunAtHourUTC`, and finish `NOT_DUE` when skipped. A failing step doesn't stop the next one, and the last step, `ReportFailures`, then marks the job `ERROR`.
+
+Upgrading from a version with several jobs? Import `metadata/retired-jobs/jobs.xml` once to delete the old ones.
+
 ## Production blockers
 
 These must be resolved and signed off before production use. They are explained in [SECURITY.md](docs/SECURITY.md#production-blockers).
@@ -149,5 +155,5 @@ These must be resolved and signed off before production use. They are explained 
 2. **Identity and payout-account verification**: integrate a verification provider, or keep manual review and get it approved by compliance.
 3. **Malware scanning** of uploaded documents and images (`app.plugin.seller.scan`), or keep `sellerRequireCleanDocumentScan` on and scan out of band.
 4. **Marketplace facilitator tax**: decide how sales tax is collected and remitted for third-party sales. The plugin uses the site's tax calculation unchanged.
-5. **Sandbox verification**: S1 (install), S2 (buying an offer: offer price, "Sold by", seller order with commission, shipment) and S10 (all ten jobs ran OK) passed on `zyeu-002` on 2026-10-27, together with onboarding, review and approval. S3–S9 remain open; see [TESTING.md](docs/TESTING.md#sandbox-verification-plan).
+5. **Sandbox verification**: S1 (install), S2 (buying an offer: offer price, "Sold by", seller order with commission, shipment) and S10 (all ten tasks, then separate jobs, ran OK) passed on `zyeu-002` on 2026-10-27, together with onboarding, review and approval. S3–S9 remain open; see [TESTING.md](docs/TESTING.md#sandbox-verification-plan).
 6. **Legal**: the seller agreement, privacy notice and document retention period need legal approval.
